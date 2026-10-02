@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="아이디어를 나만의 웹페이지로 만드는 디지털 메이커 클래스. HTML, CSS, JavaScript로 구성한 홍보 페이지 데모입니다.">
+  <meta name="theme-color" content="#2457ef">
+  <title>메이크랩 | 디지털 메이커 클래스</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='11' fill='%232457ef'/%3E%3Cpath d='M9 28V12l11 11 11-11v16' fill='none' stroke='white' stroke-width='4' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <style>
+    /* CSS: 색상과 화면 구성은 이 영역에서 수정합니다. */
+    :root{--blue:#2457ef;--blue-dark:#1940b8;--ink:#172237;--muted:#5d6a80;--line:#dfe5ef;--soft:#f3f6ff;--white:#fff;--radius:24px}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:105px}
+    body{margin:0;background:var(--white);color:var(--ink);font-family:Pretendard,"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;font-size:16px;line-height:1.7;word-break:keep-all;overflow-wrap:anywhere}
+    button,input,select,textarea{font:inherit}
+    a{color:inherit;text-decoration:none}
+    button,a,input,select,textarea,summary{-webkit-tap-highlight-color:transparent}
+    button{cursor:pointer}
+    :focus-visible{outline:3px solid #df9400;outline-offset:5px}
+    .wrap{width:min(1120px,calc(100% - 48px));margin:auto}
+    .skip{position:fixed;top:-100px;left:16px;background:var(--ink);color:white;padding:10px 20px;z-index:20}
+    .skip:focus{top:10px}
+    .header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);background:rgba(255,255,255,.96)}
+    .nav{min-height:80px;display:flex;align-items:center;gap:32px}
+    .brand{display:inline-flex;align-items:center;gap:10px;font-size:22px;letter-spacing:-1px;font-weight:900;white-space:nowrap}
+    .brand svg{width:34px;height:34px}
+    .nav-links{margin-left:auto;display:flex;align-items:center;gap:30px;font-size:14px;font-weight:700}
+    .nav-links>a:not(.button):hover{color:var(--blue)}
+    .menu{display:none;background:transparent;border:1px solid var(--line);border-radius:10px;padding:7px 13px;min-height:44px;color:var(--ink)}
+    .button{display:inline-flex;justify-content:center;align-items:center;min-height:50px;padding:12px 23px;border:1px solid transparent;border-radius:12px;background:var(--blue);color:white;font-weight:700;line-height:1.5;transition:background .18s,transform .18s}
+    .button:hover{background:var(--blue-dark);transform:translateY(-2px)}
+    .button.secondary{border-color:var(--line);background:white;color:var(--ink)}
+    .button.secondary:hover{background:var(--soft)}
+    .nav-links .button{min-height:42px;padding:9px 18px}
+    .hero{padding:80px 0 70px;display:grid;grid-template-columns:1.1fr 1fr;align-items:center;gap:64px}
+    .eyebrow{font-size:13px;letter-spacing:2px;font-weight:800;color:var(--blue);margin:0 0 22px}
+    h1{font-size:clamp(38px,4.7vw,60px);letter-spacing:-2.5px;line-height:1.22;margin:0 0 25px;font-weight:900}
+    h1 em{font-style:normal;color:var(--blue)}
+    .lead{max-width:470px;color:var(--muted);font-size:17px;margin:0 0 29px;line-height:1.85}
+    .actions{display:flex;flex-wrap:wrap;gap:12px}
+    .hero-note{font-size:13px;color:var(--muted);margin:16px 0 0}
+    .lab{border:1px solid #d4deef;border-radius:var(--radius);overflow:hidden;box-shadow:0 24px 65px #25417a12;background:var(--soft);transform:rotate(1.5deg)}
+    .lab-bar{padding:16px 21px;display:flex;justify-content:space-between;background:white;border-bottom:1px solid var(--line);font-size:12px;color:var(--muted);letter-spacing:.7px}
+    .lab-mark{color:var(--blue);font-weight:800}
+    .lab-inner{padding:26px}
+    .lab-label{margin:0 0 12px;font-size:14px;color:var(--muted)}
+    .idea-input{width:100%;background:white;border:1px solid #cbd7f5;border-radius:12px;padding:13px 15px;color:var(--ink);font-size:16px}
+    .live-card{background:var(--blue);color:white;border-radius:18px;margin-top:16px;padding:30px 24px;min-height:184px;position:relative}
+    .live-card .small{font-size:12px;letter-spacing:1.8px;color:#dce6ff}
+    .live-card h2{font-size:30px;line-height:1.4;margin:16px 0 7px;letter-spacing:-1px;word-break:break-word}
+    .live-card p{margin:0;font-size:14px;color:#e2eaff}
+    .lab-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+    .tag{font-size:12px;font-weight:700;border:1px solid #d7e0f4;background:white;padding:5px 10px;border-radius:7px;color:#445474}
+    .intro-strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+    .strip-inner{display:grid;grid-template-columns:repeat(3,1fr);padding:25px 0;gap:28px}
+    .strip-item{display:flex;align-items:center;gap:13px;font-weight:700;font-size:15px}
+    .check{width:28px;height:28px;display:grid;place-items:center;color:var(--blue);background:#edf2ff;border-radius:50%;flex-shrink:0}
+    section{scroll-margin-top:20px}
+    .section{padding:78px 0}
+    .section-head{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:32px}
+    .section-head h2,.faq h2,.apply h2{font-size:34px;letter-spacing:-1.3px;line-height:1.4;margin:5px 0 0}
+    .section-head p{color:var(--muted);margin:0;font-size:15px}
+    .kicker{font-size:12px;font-weight:800;letter-spacing:2px;color:var(--blue)}
+    .program-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}
+    .program{border:1px solid var(--line);border-radius:18px;padding:24px;text-align:left;background:white;color:var(--ink);min-height:213px;transition:border-color .2s,background .2s}
+    .program:hover{border-color:var(--blue);background:#fafbff}
+    .program[aria-pressed="true"]{border:2px solid var(--blue);padding:23px;background:var(--soft)}
+    .program-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+    .number{font-size:13px;font-weight:800;color:var(--blue);font-family:monospace}
+    .choice{font-size:12px;color:var(--muted)}
+    .program[aria-pressed="true"] .choice{color:var(--blue);font-weight:800}
+    .program strong{display:block;font-size:22px;letter-spacing:-.7px;margin-bottom:8px}
+    .program .desc{font-size:14px;color:var(--muted);display:block}
+    .program-detail{display:flex;align-items:center;gap:20px;margin-top:19px;padding:20px 24px;border-radius:14px;background:#f6f8fc;color:var(--muted);font-size:14px}
+    .program-detail strong{color:var(--ink);white-space:nowrap}
+    .program-detail p{margin:0}
+    .journey{background:#f7f9fd}
+    .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
+    .step{border-top:2px solid #c9d5ee;padding-top:24px}
+    .step span{font-size:13px;color:var(--blue);font-weight:800}
+    .step h3{font-size:22px;letter-spacing:-.6px;margin:9px 0}
+    .step p{font-size:15px;color:var(--muted);margin:0}
+    .faq{display:grid;grid-template-columns:.8fr 1.2fr;gap:60px}
+    .faq details{border-bottom:1px solid var(--line);padding:20px 0}
+    .faq details:first-child{padding-top:0}
+    summary{font-weight:700;cursor:pointer;padding:5px 0;min-height:40px}
+    details p{font-size:15px;color:var(--muted);margin:12px 0 4px;padding-right:15px}
+    .apply{border-radius:var(--radius);background:var(--soft);padding:45px;display:grid;grid-template-columns:1fr 1fr;gap:65px;margin-bottom:64px;align-items:start}
+    .apply p{color:var(--muted);font-size:15px;margin:16px 0}
+    .demo-note{margin-top:25px;padding-left:15px;border-left:3px solid var(--blue);font-size:14px;color:#405276}
+    .field{margin-bottom:16px}
+    label{display:block;font-size:14px;font-weight:700;margin-bottom:7px}
+    input,select,textarea{width:100%;padding:12px 14px;border:1px solid #cbd4e4;border-radius:10px;background:white;color:var(--ink);min-height:48px}
+    textarea{resize:vertical;min-height:90px;display:block}
+    .optional{font-weight:400;color:var(--muted)}
+    .form-actions{display:flex;gap:10px;flex-wrap:wrap}
+    .form-actions .button:first-child{flex:1}
+    .form-result{margin:16px 0 0!important;padding:14px 17px;background:white;border:1px solid #b8caef;border-radius:12px;color:#234f9c!important;word-break:break-word}
+    [hidden]{display:none!important}
+    footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-size:13px}
+    .footer-inner{display:flex;justify-content:space-between;gap:20px;align-items:center}
+    .footer-inner strong{color:var(--ink);font-size:16px}
+    .top-link{font-weight:700;white-space:nowrap}
+    @media(max-width:900px){.hero{gap:30px;padding:55px 0}.lab-inner{padding:20px}.hero h1{font-size:44px}.apply{gap:35px;padding:32px}.faq{gap:35px}.nav-links{gap:20px}}
+    @media(max-width:680px){.wrap{width:calc(100% - 36px)}.nav{min-height:68px;flex-wrap:wrap;gap:0;justify-content:space-between}.menu{display:block}.nav-links{width:100%;margin:0;display:none;flex-direction:column;align-items:stretch;padding:10px 0 20px;gap:5px}.nav-links.open{display:flex}.nav-links>a{padding:10px}.hero{grid-template-columns:1fr;gap:35px;padding:44px 0}.hero h1{font-size:43px}.lead{font-size:16px}.lab{transform:none}.live-card{min-height:160px}.strip-inner{grid-template-columns:1fr;gap:14px;padding:23px 0}.section{padding:52px 0}.section-head{display:block;margin-bottom:25px}.section-head p{margin-top:12px}.section-head h2,.faq h2,.apply h2{font-size:29px}.program-grid,.steps,.faq,.apply{grid-template-columns:1fr}.program{min-height:auto;padding:21px}.program[aria-pressed="true"]{padding:20px}.program-top{margin-bottom:12px}.program-detail{display:block}.program-detail p{margin-top:7px}.steps{gap:28px}.faq{gap:26px}.apply{padding:28px 22px;gap:25px;margin-bottom:40px}.footer-inner{align-items:start;flex-wrap:wrap}.hero-note{font-size:12px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
+  </style>
+</head>
+<body id="top">
+  <a class="skip" href="#main">본문으로 이동</a>
+  <header class="header">
+    <nav class="nav wrap" aria-label="주요 메뉴">
+      <a class="brand" href="#top" aria-label="메이크랩 처음으로">
+        <svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="11" fill="#2457ef"/><path d="M9 28V12l11 11 11-11v16" fill="none" stroke="white" stroke-width="4" stroke-linejoin="round"/></svg>
+        메이크랩<span style="color:var(--blue)">.</span>
+      </a>
+      <button class="menu" type="button" aria-expanded="false" aria-controls="nav-links">메뉴</button>
+      <div class="nav-links" id="nav-links">
+        <a href="#programs">프로그램</a><a href="#journey">진행 과정</a><a href="#faq">자주 묻는 질문</a><a href="#apply" class="button">신청 체험하기</a>
+      </div>
+    </nav>
+  </header>
+  <main id="main">
+    <div class="wrap hero">
+      <div>
+        <p class="eyebrow">DIGITAL MAKER CLASS</p>
+        <h1>생각만 하던 아이디어,<br><em>내 손으로 만드는 웹.</em></h1>
+        <p class="lead">동아리 소개부터 나만의 포트폴리오까지.<br>작은 아이디어 하나로 시작해, 직접 보고 눌러 볼 수 있는 나만의 페이지를 만들어 보세요.</p>
+        <div class="actions"><a class="button" href="#apply">나의 프로젝트 시작하기</a><a class="button secondary" href="#programs">프로그램 살펴보기</a></div>
+        <p class="hero-note">홍보용 예시 페이지 · 실제 모집 중인 프로그램이 아닙니다.</p>
+      </div>
+      <div class="lab">
+        <div class="lab-bar"><span class="lab-mark">MAKE LAB / PLAYGROUND</span><span>LIVE PREVIEW</span></div>
+        <div class="lab-inner">
+          <label class="lab-label" for="idea">어떤 페이지를 만들고 싶나요?</label>
+          <input class="idea-input" id="idea" maxlength="24" value="우리 동아리의 첫 번째 웹" autocomplete="off" aria-describedby="idea-help">
+          <div class="live-card"><span class="small">MY FIRST PROJECT</span><h2 id="live-title">우리 동아리의 첫 번째 웹</h2><p>작은 시작이 하나의 작품이 되는 곳.</p></div>
+          <div class="lab-tags" aria-label="사용 기술"><span class="tag">HTML · 구조</span><span class="tag">CSS · 디자인</span><span class="tag">JS · 상호작용</span></div>
+          <p id="idea-help" class="hero-note">제목을 입력하면 위 카드에 바로 반영됩니다.</p>
+        </div>
+      </div>
+    </div>
+    <div class="intro-strip"><div class="wrap strip-inner"><div class="strip-item"><span class="check" aria-hidden="true">✓</span>생활 속 아이디어로 시작</div><div class="strip-item"><span class="check" aria-hidden="true">✓</span>직접 만들며 배우는 과정</div><div class="strip-item"><span class="check" aria-hidden="true">✓</span>모바일에서도 열리는 결과물</div></div></div>
+    <section class="section wrap" id="programs" aria-labelledby="program-heading">
+      <div class="section-head"><div><span class="kicker">FIND YOUR PROJECT</span><h2 id="program-heading">무엇을 만들어 볼까요?</h2></div><p>관심 있는 프로젝트를 선택해 보세요.</p></div>
+      <div class="program-grid" role="group" aria-label="프로젝트 선택">
+        <button class="program" type="button" data-program="club" aria-pressed="true"><span class="program-top"><span class="number">01 / CONNECT</span><span class="choice">선택됨</span></span><strong>동아리 홍보 페이지</strong><span class="desc">우리 동아리의 이야기와 활동을<br>하나의 페이지에 담아요.</span></button>
+        <button class="program" type="button" data-program="portfolio" aria-pressed="false"><span class="program-top"><span class="number">02 / EXPRESS</span><span class="choice">선택하기</span></span><strong>나만의 포트폴리오</strong><span class="desc">관심 분야와 프로젝트를 모아<br>나를 소개하는 공간을 만들어요.</span></button>
+        <button class="program" type="button" data-program="survey" aria-pressed="false"><span class="program-top"><span class="number">03 / DISCOVER</span><span class="choice">선택하기</span></span><strong>학교생활 설문</strong><span class="desc">급식부터 매점 메뉴까지,<br>친구들의 의견을 묻는 화면을 만들어요.</span></button>
+      </div>
+      <div class="program-detail" aria-live="polite" aria-atomic="true"><strong id="detail-label">동아리 홍보 페이지</strong><p id="detail-text">활동 소개, 사진 영역, 참여 안내를 구성하고 버튼과 메뉴를 연결합니다.</p></div>
+    </section>
+    <section class="journey section" id="journey" aria-labelledby="journey-heading"><div class="wrap">
+      <div class="section-head"><div><span class="kicker">FROM IDEA TO PAGE</span><h2 id="journey-heading">아이디어가 페이지가 되는 과정</h2></div></div>
+      <div class="steps"><article class="step"><span>STEP 01</span><h3>무엇을 담을지 정해요</h3><p>누가 사용할지 생각하고, 꼭 필요한 내용과 기능을 골라 봅니다.</p></article><article class="step"><span>STEP 02</span><h3>화면과 동작을 만들어요</h3><p>제목, 색상, 버튼을 다듬으며 아이디어를 직접 사용할 수 있는 화면으로 바꿉니다.</p></article><article class="step"><span>STEP 03</span><h3>열어 보고 개선해요</h3><p>컴퓨터와 휴대폰에서 확인하고, 다른 사람의 의견을 받아 수정합니다.</p></article></div>
+    </div></section>
+    <section class="section wrap faq" id="faq" aria-labelledby="faq-heading">
+      <div><span class="kicker">GOOD TO KNOW</span><h2 id="faq-heading">시작하기 전에<br>궁금한 이야기</h2></div>
+      <div><details open><summary>코딩을 처음 해도 괜찮나요?</summary><p>이 예시 파일에서는 제목과 문구부터 바꿔 볼 수 있습니다. 코드를 편집한 뒤 저장하고 브라우저를 새로고침하면 바뀐 내용을 확인할 수 있습니다.</p></details><details><summary>설치해야 하는 프로그램이 있나요?</summary><p>이 페이지는 인터넷 브라우저에서 열 수 있는 HTML 한 파일입니다. 수정할 때는 메모장이나 코드 편집기를 사용하면 됩니다.</p></details><details><summary>아래 신청 폼은 실제로 접수되나요?</summary><p>테스트용입니다. 입력한 내용을 현재 화면에 표시하며 외부로 전송하거나 저장하지 않습니다. 새로고침하면 확인 메시지도 초기화됩니다.</p></details></div>
+    </section>
+    <section class="apply wrap" id="apply" aria-labelledby="apply-heading">
+      <div><span class="kicker">LET’S MAKE SOMETHING</span><h2 id="apply-heading">당신의 첫 프로젝트,<br>여기서 시작해 보세요.</h2><p>관심 있는 프로젝트를 고르고<br>만들고 싶은 페이지를 이야기해 주세요.</p><div class="demo-note"><strong>신청 폼 체험</strong><br>실제 접수나 데이터 전송은 이루어지지 않습니다.<br>이름 대신 테스트용 별명을 입력해 주세요.</div></div>
+      <form id="application-form">
+        <div class="field"><label for="nickname">별명</label><input id="nickname" maxlength="30" placeholder="예: 메이커" required autocomplete="off"></div>
+        <div class="field"><label for="program-select">관심 프로젝트</label><select id="program-select"><option value="club">동아리 홍보 페이지</option><option value="portfolio">나만의 포트폴리오</option><option value="survey">학교생활 설문</option></select></div>
+        <div class="field"><label for="message">만들고 싶은 페이지 <span class="optional">(선택)</span></label><textarea id="message" maxlength="200" placeholder="예: 친구들과 함께 만든 작품을 소개하고 싶어요."></textarea></div>
+        <div class="form-actions"><button class="button" type="submit">신청 동작 테스트</button><button class="button secondary" type="reset">초기화</button></div>
+        <p class="form-result" id="form-result" role="status" aria-live="polite" hidden></p>
+      </form>
+    </section>
+  </main>
+  <footer><div class="wrap footer-inner"><div><strong>메이크랩.</strong><br>디지털 메이커 클래스 · 테스트용 홍보 페이지</div><a class="top-link" href="#top">맨 위로</a></div></footer>
+  <noscript><p class="wrap">JavaScript가 비활성화되어 있습니다. 실시간 제목 변경과 신청 체험 기능을 사용하려면 활성화해 주세요.</p></noscript>
+  <script>
+    // JavaScript: 입력 반영, 프로그램 선택, 메뉴, 신청 체험 기능입니다.
+    'use strict';
+    const programs = {
+      club: { title: '동아리 홍보 페이지', description: '활동 소개, 사진 영역, 참여 안내를 구성하고 버튼과 메뉴를 연결합니다.' },
+      portfolio: { title: '나만의 포트폴리오', description: '자기소개와 관심 분야, 프로젝트 기록을 묶어 나를 표현하는 페이지를 만듭니다.' },
+      survey: { title: '학교생활 설문', description: '질문과 선택지를 구성하고 응답을 확인하는 화면을 만듭니다. 실제 응답 수집은 별도 연동이 필요합니다.' }
+    };
+    const select = document.querySelector('#program-select');
+    const result = document.querySelector('#form-result');
+    const form = document.querySelector('#application-form');
+    const nickname = document.querySelector('#nickname');
+    function clearResult() { result.hidden = true; result.textContent = ''; }
+    function chooseProgram(key) {
+      if (!programs[key]) return;
+      select.value = key;
+      document.querySelectorAll('.program').forEach(button => {
+        const active = button.dataset.program === key;
+        button.setAttribute('aria-pressed', String(active));
+        button.querySelector('.choice').textContent = active ? '선택됨' : '선택하기';
+      });
+      document.querySelector('#detail-label').textContent = programs[key].title;
+      document.querySelector('#detail-text').textContent = programs[key].description;
+      clearResult();
+    }
+    document.querySelectorAll('.program').forEach(button => button.addEventListener('click', () => chooseProgram(button.dataset.program)));
+    select.addEventListener('change', () => chooseProgram(select.value));
+    document.querySelector('#idea').addEventListener('input', event => {
+      document.querySelector('#live-title').textContent = event.target.value.trim() || '나만의 첫 번째 웹';
+    });
+    const menu = document.querySelector('.menu');
+    const navigation = document.querySelector('#nav-links');
+    function closeMenu() { menu.setAttribute('aria-expanded', 'false'); navigation.classList.remove('open'); }
+    menu.addEventListener('click', () => {
+      const expanded = menu.getAttribute('aria-expanded') === 'true';
+      menu.setAttribute('aria-expanded', String(!expanded));
+      navigation.classList.toggle('open', !expanded);
+    });
+    navigation.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+    document.addEventListener('keydown', event => { if (event.key === 'Escape' && menu.getAttribute('aria-expanded') === 'true') { closeMenu(); menu.focus(); } });
+    form.addEventListener('input', () => { nickname.setCustomValidity(''); clearResult(); });
+    form.addEventListener('submit', event => {
+      event.preventDefault(); // 서버로 전송하지 않습니다.
+      const name = nickname.value.trim();
+      if (!name) { nickname.setCustomValidity('공백이 아닌 별명을 입력해 주세요.'); nickname.reportValidity(); return; }
+      const message = document.querySelector('#message').value.trim();
+      result.textContent = name + '님, 「' + programs[select.value].title + '」 신청 동작을 확인했습니다.' + (message ? ' 작성한 내용: ' + message : '') + ' 실제 접수·전송·저장은 되지 않았습니다.';
+      result.hidden = false;
+    });
+    form.addEventListener('reset', () => { nickname.setCustomValidity(''); chooseProgram('club'); clearResult(); });
+  </script>
+</body>
+</html>
